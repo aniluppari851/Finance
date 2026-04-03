@@ -25,7 +25,7 @@ const itemVariants = {
 const Dashboard = () => {
   const { transactions, totals, balance } = useFinance()
 
-  // ... (rest of data processing logic remains same) ...
+  // Logic for trend data and categories
   const trendData = [
     { name: 'Jan', income: 4200, expense: 3100 },
     { name: 'Feb', income: 3800, expense: 3500 },
@@ -83,8 +83,8 @@ const Dashboard = () => {
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-lg font-bold">Balance Trends</h3>
             <select className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer dark:text-slate-300">
-              <option className="dark:bg-slate-900">Last 6 Months</option>
-              <option className="dark:bg-slate-900">Last 3 Months</option>
+              <option className="dark:bg-slate-900 text-gray-900 dark:text-white">Last 6 Months</option>
+              <option className="dark:bg-slate-900 text-gray-900 dark:text-white">Last 3 Months</option>
             </select>
           </div>
           <div className="h-[300px] w-full">
@@ -146,7 +146,7 @@ const Dashboard = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-full md:w-1/2 space-y-4">
+            <div className="w-full md:w-1/2 space-y-4 overflow-y-auto max-h-[250px] pr-2">
               {pieData.map((entry, index) => (
                 <div key={entry.name} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -156,6 +156,9 @@ const Dashboard = () => {
                   <span className="text-sm font-bold">${entry.value}</span>
                 </div>
               ))}
+              {pieData.length === 0 && (
+                <p className="text-sm text-gray-400 text-center py-8">No expense data available</p>
+              )}
             </div>
           </div>
         </motion.div>
@@ -183,7 +186,7 @@ const Dashboard = () => {
           </div>
           <div>
             <p className="text-xs text-white/70 font-medium">Savings Rate</p>
-            <p className="text-lg font-bold">{Math.round((balance / totals.income) * 100)}%</p>
+            <p className="text-lg font-bold">{Math.round((balance / (totals.income || 1)) * 100)}%</p>
           </div>
         </motion.div>
       </div>
